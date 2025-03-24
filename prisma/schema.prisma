@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Roles {
+  id_rol Int @id @default(autoincrement())
+  nombre String
+  usuarios Usuarios[]
+}
+
+model Usuarios {
+  id_usuario Int @id @default(autoincrement())
+  grupo_id Int?
+  rol_id Int?
+  nombre String
+  correo_electronico String @unique
+  password String
+  fecha_creacion DateTime @default(now())
+  
+  grupo Grupo? @relation(fields: [grupo_id], references: [id_grupo])
+  rol Roles? @relation(fields: [rol_id], references: [id_rol])
+  dispositivos Dispositivos[]
+  notificaciones Notificaciones[]
+}
+
+model Grupo {
+  id_grupo Int @id @default(autoincrement())
+  nombre String
+  fecha_registro DateTime @default(now())
+  usuarios Usuarios[]
+}
+
+model Dispositivos {
+  id_dispositivo Int @id @default(autoincrement())
+  usuario_id Int
+  tipo String
+  nombre String
+  direccion_ip String @unique
+  status Boolean @default(true)
+  fecha_registro DateTime @default(now())
+  
+  usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
+}
+
+model Notificaciones {
+  id_notificacion Int @id @default(autoincrement())
+  usuario_id Int
+  mensaje String
+  fecha_envio DateTime @default(now())
+  status Boolean @default(false)
+  
+  usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
+}
