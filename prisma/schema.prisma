@@ -13,52 +13,71 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
+//Se crea la tabla Roles, contiene el id y su nombre
+
 model Roles {
   id_rol Int @id @default(autoincrement())
   nombre String
   usuarios Usuarios[]
 }
 
+
+//Se crea la tabla Usuarios, contiene el id, su nombre, correo, contraseña y fecha de creación. 
+//También tiene el campo rol_id que se relaciona con la tabla correspondiente.
+
 model Usuarios {
   id_usuario Int @id @default(autoincrement())
-  grupo_id Int?
-  rol_id Int?
   nombre String
   correo_electronico String @unique
   password String
   fecha_creacion DateTime @default(now())
-  
-  grupo Grupo? @relation(fields: [grupo_id], references: [id_grupo])
+  rol_id Int?
+
   rol Roles? @relation(fields: [rol_id], references: [id_rol])
-  dispositivos Dispositivos[]
+  grupo Grupos[]
   notificaciones Notificaciones[]
 }
 
-model Grupo {
+
+//Se crea la tabla Grupos, contiene el id, su nombre, fecha de registro. 
+//También tiene los campos usuario_id y dispositivo_id que se relacionan con las tablas correspondientes.
+
+model Grupos {
   id_grupo Int @id @default(autoincrement())
   nombre String
   fecha_registro DateTime @default(now())
-  usuarios Usuarios[]
+  dispositivo_id Int
+  usuario_id Int
+
+  dispositivo Dispositivos @relation(fields: [dispositivo_id], references: [id_dispositivo])
+  usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
 }
+
+
+//Se crea la tabla Dispositivos, contiene el id, su nombre, tipo de dispositivo, direccion ip, estado y fecha de registro.
 
 model Dispositivos {
   id_dispositivo Int @id @default(autoincrement())
-  usuario_id Int
   tipo String
   nombre String
   direccion_ip String @unique
   status Boolean @default(true)
   fecha_registro DateTime @default(now())
   
-  usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
+   grupo Grupos[]
 }
+
+
+//Se crea la tabla Notificaciones, contiene el id, su nombre, mensaje, fecha de registro, y el estado. 
+//También tiene el campo usuario_id que se relaciona con la tabla correspondiente.
 
 model Notificaciones {
   id_notificacion Int @id @default(autoincrement())
-  usuario_id Int
   mensaje String
   fecha_envio DateTime @default(now())
   status Boolean @default(false)
+  usuario_id Int
   
   usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
 }
