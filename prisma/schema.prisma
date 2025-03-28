@@ -19,12 +19,13 @@ generator client {
 model Roles {
   id_rol Int @id @default(autoincrement())
   nombre String
+  
   usuarios Usuarios[]
 }
 
 
 //Se crea la tabla Usuarios, contiene el id, su nombre, correo, contraseña y fecha de creación. 
-//También tiene el campo rol_id que se relaciona con la tabla correspondiente.
+//También tiene los campos rol_id y grupo_id que se relacionan con la tablas correspondientes.
 
 model Usuarios {
   id_usuario Int @id @default(autoincrement())
@@ -32,26 +33,26 @@ model Usuarios {
   correo_electronico String @unique
   password String
   fecha_creacion DateTime @default(now())
-  rol_id Int?
+  rol_id Int
+  grupo_id Int?
 
-  rol Roles? @relation(fields: [rol_id], references: [id_rol])
-  grupo Grupos[]
+  rol Roles @relation(fields: [rol_id], references: [id_rol])
+  grupo Grupos? @relation(fields: [grupo_id], references: [id_grupo])
   notificaciones Notificaciones[]
 }
 
 
 //Se crea la tabla Grupos, contiene el id, su nombre, fecha de registro. 
-//También tiene los campos usuario_id y dispositivo_id que se relacionan con las tablas correspondientes.
+//También tiene el campo dispositivo_id que se relaciona con la tabla correspondiente.
 
 model Grupos {
   id_grupo Int @id @default(autoincrement())
   nombre String
   fecha_registro DateTime @default(now())
   dispositivo_id Int
-  usuario_id Int
 
   dispositivo Dispositivos @relation(fields: [dispositivo_id], references: [id_dispositivo])
-  usuario Usuarios @relation(fields: [usuario_id], references: [id_usuario])
+  usuario Usuarios[]
 }
 
 
@@ -64,7 +65,7 @@ model Dispositivos {
   direccion_ip String @unique
   status Boolean @default(true)
   fecha_registro DateTime @default(now())
-  
+
    grupo Grupos[]
 }
 

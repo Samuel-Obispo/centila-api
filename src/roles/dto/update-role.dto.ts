@@ -5,7 +5,7 @@ import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {
     @IsOptional()
-    @ApiProperty({ example: 'Usuario', description: 'Nombre del usuario' })
+    @ApiProperty({ description: 'Nombre del rol' })
     @IsString()
     nombre?: string;
 } 

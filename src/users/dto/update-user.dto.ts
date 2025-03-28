@@ -5,6 +5,8 @@ import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto)  {
 
+    //??AQUI SE MUESTRAN LOS CAMPOS QUE SE PUEDEN MODIFICAR DE UN USUARIO
+
     @IsOptional()
     @ApiProperty({ description: 'Grupo de dispositivos del usuario' })
     grupo_id?: number;
