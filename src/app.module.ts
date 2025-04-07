@@ -7,6 +7,7 @@ import { RolesModule } from './roles/roles.module';
 import { DevicesModule } from './devices/devices.module';
 import { GroupsModule } from './groups/groups.module';
 import { NotisModule } from './notis/notis.module';
+import { FirebaseModule } from './firebase/firebase.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { NotisModule } from './notis/notis.module';
     DevicesModule,
     GroupsModule,
     NotisModule,
+    FirebaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
